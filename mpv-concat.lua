@@ -5,6 +5,8 @@
 local mp  = require 'mp'
 local msg = require 'mp.msg'
 
+local preview_mode = false
+local timer = nil
 local file_name = "concat.txt"
 local concat_file = string.format("%s/%s", mp.get_property("working-directory"), file_name)
 local times = {}
@@ -35,28 +37,12 @@ local function time_to_str(time)
 	return fmt_time
 end
 
-local function reset_chapters()
-	local chapters = {}
-
-	for i, obj in ipairs(times) do
-		if obj.t_file == mp.get_property("path") then
-			table.insert(chapters, {
-				title = string.format("Segment %d", i),
-				time = obj.t_start
-			})
-		end
-	end
-	mp.set_property_native("chapter-list", chapters)
-end
-
 local function add_time(obj)
 	table.insert(times, obj)
-	reset_chapters()
 end
 
 local function del_time(num)
 	table.remove(times, num)
-	reset_chapters()
 end
 
 function put_time()
@@ -82,7 +68,7 @@ function put_time()
 	notify(2000, message, ": ", time)
 end
 
-function print_times()
+function show_times()
 	notify(2000, "Total cuts: ", #times)
 
 	for i, obj in ipairs(times) do
@@ -196,15 +182,42 @@ function write_concat()
 	notify(10000, "concat file saved as: ", concat_file)
 end
 
+local function add_timer(num)
+	if num <= #times then
+		mp.set_property("time-pos", times[num].t_start)
+		timer = mp.add_timeout(times[num].t_end - times[num].t_start, function() add_timer(num + 1) end)
+	else
+		mp.set_property_native("pause", true)
+		timer:kill()
+		timer = nil
+	end
+end
+
+function preview_concat()
+	if preview_mode then
+		notify(10000, "Entered preview mode")
+		add_timer(1)
+		preview_mode = true
+	else
+		notify(10000, "Exited preview mode")
+		if timer then
+			timer:kill()
+		end
+		timer = nil
+		preview_mode = false
+	end
+end
+
 mp.set_property("keep-open", "yes")     -- Prevent mpv from exiting when the video ends
 mp.set_property("quiet", "yes")         -- Silence terminal.
 
 mp.add_key_binding('q',       "quit",             function() prevent_quit("quit") end)
 mp.add_key_binding('Shift+q', "quit-watch-later", function() prevent_quit("quit-watch-later") end)
 mp.add_key_binding('ctrl+t',  "put_time",         put_time)
-mp.add_key_binding('ctrl+p',  "print_times",      print_times)
+mp.add_key_binding('ctrl+s',  "show_times",       show_times)
 mp.add_key_binding('ctrl+r',  "reset_segment",    reset_segment)
 mp.add_key_binding('ctrl+d',  "delete_segment",   delete_segment)
+mp.add_key_binding('ctrl+p',  "preview_concat",   preview_concat)
 mp.add_key_binding('ctrl+w',  "write_concat",     write_concat)
 
 read_concat()

@@ -37,8 +37,7 @@ by [ffmpeg-formats(1)](https://ffmpeg.org/ffmpeg-formats.html#concat).
 After opening a file, you can create more video segments in addition to
 the ones read from concat.txt (if it exists).  Then, after writing the
 segments to disk, a new "concat.txt" file is created in the directory
-the mpv command was ran.  The segment start times are indicated in the
-mpv timeline as chapters.
+the mpv command was ran.
 
 **Set time.**
 In the video screen, press `Ctrl + T` to grab the first timestamp and
@@ -47,7 +46,7 @@ will generate a time range, which represents a video segment.  Repeat
 this process to create more segments.
 
 **Print segments.**
-To see all the segments made so far, press `Ctrl + P`.  All segments will
+To see all the segments made so far, press `Ctrl + S`.  All segments will
 appear in the terminal in order of creation, with their corresponding
 timestamps.  Incomplete segments will show up as “Segment N in progress”,
 where N is the segment number.
@@ -79,6 +78,11 @@ Example 2: Deleting segment number 76
 	Ctrl + 6	# Concatenate number 6
 	Ctrl + D	# Exit segment deletion mode
 
+**Preview concatenation.**
+To preview how the segment concatenation will look like, press `Ctrl + P`
+to enter the preview mode.   In this mode, the player will jump between
+segments.  To exit from the preview mode, press `Ctrl + P` again.
+
 **Write concat file.**
 To write the `concat.txt` file, to be used by ffmpeg, press `Ctrl + W`.
 It's important that there are at least one segment, otherwise a blank
@@ -86,6 +90,11 @@ file will be created.
 
 
 ## Notes
+
+* I have to look for a better way of implementing the preview mode.
+  I'm currently using `mp.add_timeout()`,
+  maybe I should `mp.observe_property("time_pos", ...)`.
+  Any ideas on how to improve this are welcome.
 
 * This script prevents the mpv player from closing when the video ends,
   so that the slices don't get lost.  Keep this in mind if there's the
@@ -104,22 +113,13 @@ file will be created.
 ## Log level
 
 Everytime a timestamp is grabbed, a text will appear on the screen
-showing the selected time.  When `Ctrl + P` is pressed, besides showing
+showing the selected time.  When `Ctrl + S` is pressed, besides showing
 the slices in the terminal, it will also show on the screen the total
 number of cuts (or slices) that were made.  When pressing `Ctrl + W`, a
 message will be shown on the screen and the terminal telling that the
 `concat.txt` file was written.
 
 **Note:** Every message that appears on the terminal has the log level of 'info'.
-
-
-## Installation
-
-Since this script changes the chapter list, rather than moving this
-script to the mpv script folder (`$HOME/.config/mpv/scripts`), move
-this script to another place and create a shell file calling `mpv(1)`
-with the `--script=path/to/mpv-concat.lua` option.  Set this shell
-file as executable and run it in place of `mpv(1)`.
 
 
 ## Acknowledgments
