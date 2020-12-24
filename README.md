@@ -1,7 +1,5 @@
 # mpv-concat
 
-## Motivation
-
 Suppose you have a file called `concat.txt` with the following content:
 
 	# This is a comment
