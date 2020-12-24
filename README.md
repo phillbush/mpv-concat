@@ -23,7 +23,7 @@ with the following command.
 
 	$ ffmpeg -f concat -i concat.txt -c copy out.webm
 
-mpv-concat help the creation of such a file.  With mpv-concat you can
+mpv-concat helps the creation of such a file.  With mpv-concat you can
 interactively select segments of videos from your mpv video player.
 
 
