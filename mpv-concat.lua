@@ -65,7 +65,7 @@ function put_time()
 		message = "[END TIMESTAMP]"
 	end
 
-	notify(2000, message, ": ", time)
+	notify(2000, message, ": ", time_to_str(time))
 end
 
 function show_times()
@@ -194,7 +194,7 @@ local function add_timer(num)
 end
 
 function preview_concat()
-	if preview_mode then
+	if not preview_mode then
 		notify(10000, "Entered preview mode")
 		add_timer(1)
 		preview_mode = true
