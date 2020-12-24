@@ -119,4 +119,8 @@ message will be shown on the screen and the terminal telling that the
 
 * Thanks to [pvpscript](https://github.com/pvpscript) for writing
   [mpv-video-splice](https://github.com/pvpscript/mpv-video-splice),
-  on which this script is based.
+  on which this script and this README are based.
+
+* Thanks to [unusualpepe](https://github.com/unusualpepe) for writing
+  [mpv-multiloop](https://github.com/unusualpepe/mpv-multiloop),
+  on which the preview functions are based.
