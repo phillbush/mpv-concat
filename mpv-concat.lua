@@ -5,7 +5,7 @@
 local mp  = require 'mp'
 local msg = require 'mp.msg'
 
-local preview_mode = false
+local preview_count = 0
 local timer = nil
 local file_name = "concat.txt"
 local concat_file = string.format("%s/%s", mp.get_property("working-directory"), file_name)
@@ -149,10 +149,10 @@ function read_concat()
 			if string.match(line, "^file ") then
 				obj.t_file = get_concat_arg(line)
 			elseif string.match(line, "^inpoint ") then
-				obj.t_start = get_concat_arg(line)
+				obj.t_start = tonumber(get_concat_arg(line))
 				obj.t_starts = time_to_str(obj.t_start)
 			elseif string.match(line, "^outpoint ") then
-				obj.t_end = get_concat_arg(line)
+				obj.t_end = tonumber(get_concat_arg(line))
 				obj.t_ends = time_to_str(obj.t_end)
 			end
 			if obj.t_file and obj.t_start and obj.t_end then
@@ -182,29 +182,34 @@ function write_concat()
 	notify(10000, "concat file saved as: ", concat_file)
 end
 
-local function add_timer(num)
-	if num <= #times then
-		mp.set_property("time-pos", times[num].t_start)
-		timer = mp.add_timeout(times[num].t_end - times[num].t_start, function() add_timer(num + 1) end)
-	else
-		mp.set_property_native("pause", true)
-		timer:kill()
-		timer = nil
+function preview_kill()
+	mp.set_property_native("pause", true)
+	mp.unobserve_property(preview_handler)
+	preview_count = 0
+	notify(10000, "Exited preview mode")
+end
+
+function preview_handler()
+	if mp.get_property_number("time-pos") >= times[preview_count].t_end then
+		if preview_count < #times then
+			preview_count = preview_count + 1
+		else
+			preview_kill()
+			return
+		end
+		mp.commandv("seek", times[preview_count].t_start, "absolute", "exact")
 	end
 end
 
 function preview_concat()
-	if not preview_mode then
+	if preview_count == 0 then
 		notify(10000, "Entered preview mode")
-		add_timer(1)
-		preview_mode = true
+		preview_count = 1
+		mp.commandv("seek", times[preview_count].t_start, "absolute", "exact")
+		mp.set_property_native("pause", false)
+		mp.observe_property("time-pos", number, preview_handler)
 	else
-		notify(10000, "Exited preview mode")
-		if timer then
-			timer:kill()
-		end
-		timer = nil
-		preview_mode = false
+		preview_kill()
 	end
 end
 

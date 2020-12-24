@@ -91,11 +91,6 @@ file will be created.
 
 ## Notes
 
-* I have to look for a better way of implementing the preview mode.
-  I'm currently using `mp.add_timeout()`,
-  maybe I should `mp.observe_property("time_pos", ...)`.
-  Any ideas on how to improve this are welcome.
-
 * This script prevents the mpv player from closing when the video ends,
   so that the slices don't get lost.  Keep this in mind if there's the
   option `keep-open=no` in the current config file.
