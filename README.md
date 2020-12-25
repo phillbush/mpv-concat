@@ -90,7 +90,7 @@ file will be created.
 ## Notes
 
 * This script prevents the mpv player from closing when the video ends,
-  so that the slices don't get lost.  Keep this in mind if there's the
+  so that the segments don't get lost.  Keep this in mind if there's the
   option `keep-open=no` in the current config file.
 
 * This script will also silence the terminal, so the script messages
@@ -107,9 +107,9 @@ file will be created.
 
 Everytime a timestamp is grabbed, a text will appear on the screen
 showing the selected time.  When `Ctrl + S` is pressed, besides showing
-the slices in the terminal, it will also show on the screen the total
-number of cuts (or slices) that were made.  When pressing `Ctrl + W`, a
-message will be shown on the screen and the terminal telling that the
+the segments in the terminal, it will also show on the screen the total
+number of cuts (or segments) that were made.  When pressing `Ctrl + W`,
+a message will be shown on the screen and the terminal telling that the
 `concat.txt` file was written.
 
 **Note:** Every message that appears on the terminal has the log level of 'info'.
