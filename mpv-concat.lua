@@ -183,10 +183,10 @@ function write_concat()
 end
 
 function preview_kill()
+	notify(10000, "Exited preview mode")
 	mp.set_property_native("pause", true)
 	mp.unobserve_property(preview_handler)
 	preview_count = 0
-	notify(10000, "Exited preview mode")
 end
 
 function preview_handler()
