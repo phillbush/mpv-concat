@@ -203,7 +203,10 @@ function preview_kill()
 end
 
 function preview_handler()
-	if mp.get_property_bool("time-pos") and mp.get_property_number("time-pos") >= preview_times[preview_count].t_end then
+	if mp.get_property_number("time-pos") == nil then
+		return
+	end
+	if mp.get_property_number("time-pos") >= preview_times[preview_count].t_end then
 		if preview_count < #preview_times then
 			preview_count = preview_count + 1
 		else
