@@ -182,6 +182,19 @@ function write_concat()
 	notify(10000, "concat file saved as: ", concat_file)
 end
 
+function init_preview_times()
+	preview_times = {}
+	for i, obj in ipairs(times) do
+		if obj.t_file == mp.get_property("path") then
+			table.insert(preview_times, {t_start = obj.t_start, t_end = obj.t_end})
+		end
+	end
+	if #preview_times > 0 then
+		return true
+	end
+	return false
+end
+
 function preview_kill()
 	notify(2000, "Exited preview mode")
 	mp.set_property_native("pause", true)
@@ -190,24 +203,28 @@ function preview_kill()
 end
 
 function preview_handler()
-	if mp.get_property_bool("time-pos") and mp.get_property_number("time-pos") >= times[preview_count].t_end then
-		if preview_count < #times then
+	if mp.get_property_bool("time-pos") and mp.get_property_number("time-pos") >= preview_times[preview_count].t_end then
+		if preview_count < #preview_times then
 			preview_count = preview_count + 1
 		else
 			preview_kill()
 			return
 		end
-		mp.commandv("seek", times[preview_count].t_start, "absolute", "exact")
+		mp.commandv("seek", preview_times[preview_count].t_start, "absolute", "exact")
 	end
 end
 
 function preview_concat()
 	if preview_count == 0 then
-		notify(2000, "Entered preview mode")
-		preview_count = 1
-		mp.commandv("seek", times[preview_count].t_start, "absolute", "exact")
-		mp.set_property_native("pause", false)
-		mp.observe_property("time-pos", number, preview_handler)
+		if init_preview_times() then
+			notify(2000, "Entered preview mode")
+			preview_count = 1
+			mp.commandv("seek", preview_times[preview_count].t_start, "absolute", "exact")
+			mp.set_property_native("pause", false)
+			mp.observe_property("time-pos", number, preview_handler)
+		else
+			notify(2000, "No segment on this video")
+		end
 	else
 		preview_kill()
 	end
