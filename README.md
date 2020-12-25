@@ -32,8 +32,8 @@ interactively select segments of videos from your mpv video player.
 If a file named `concat.txt` exists in the current working directory, it
 is read by this script and video segments are get from it, as specified
 by [ffmpeg-formats(1)](https://ffmpeg.org/ffmpeg-formats.html#concat).
-After opening a file, you can create more video segments in addition to
-the ones read from `concat.txt` (if it exists).  Then, after writing the
+After opening a video file with mpv, you can create more video segments
+in addition to the ones read from `concat.txt`.  Then, after writing the
 segments to disk, a new `concat.txt` file is created in the directory
 the mpv command was ran.
 
@@ -43,7 +43,7 @@ then press `Ctrl + T` again to get the second timestamp. This process
 will generate a time range, which represents a video segment.  Repeat
 this process to create more segments.
 
-**Print segments.**
+**Show segments.**
 To see all the segments made so far, press `Ctrl + S`.  All segments will
 appear in the terminal in order of creation, with their corresponding
 timestamps.  Incomplete segments will show up as “Segment N in progress”,
