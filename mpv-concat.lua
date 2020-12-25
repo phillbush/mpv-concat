@@ -68,7 +68,7 @@ function put_time()
 	notify(2000, message, ": ", time_to_str(time))
 end
 
-function show_times()
+function print_times()
 	notify(2000, "Total cuts: ", #times)
 
 	for i, obj in ipairs(times) do
@@ -183,7 +183,7 @@ function write_concat()
 end
 
 function preview_kill()
-	notify(10000, "Exited preview mode")
+	notify(2000, "Exited preview mode")
 	mp.set_property_native("pause", true)
 	mp.unobserve_property(preview_handler)
 	preview_count = 0
@@ -203,7 +203,7 @@ end
 
 function preview_concat()
 	if preview_count == 0 then
-		notify(10000, "Entered preview mode")
+		notify(2000, "Entered preview mode")
 		preview_count = 1
 		mp.commandv("seek", times[preview_count].t_start, "absolute", "exact")
 		mp.set_property_native("pause", false)
@@ -219,10 +219,10 @@ mp.set_property("quiet", "yes")         -- Silence terminal.
 mp.add_key_binding('q',       "quit",             function() prevent_quit("quit") end)
 mp.add_key_binding('Shift+q', "quit-watch-later", function() prevent_quit("quit-watch-later") end)
 mp.add_key_binding('ctrl+t',  "put_time",         put_time)
-mp.add_key_binding('ctrl+s',  "show_times",       show_times)
+mp.add_key_binding('ctrl+p',  "print_times",      print_times)
 mp.add_key_binding('ctrl+r',  "reset_segment",    reset_segment)
 mp.add_key_binding('ctrl+d',  "delete_segment",   delete_segment)
-mp.add_key_binding('ctrl+p',  "preview_concat",   preview_concat)
+mp.add_key_binding('ctrl+v',  "preview_concat",   preview_concat)
 mp.add_key_binding('ctrl+w',  "write_concat",     write_concat)
 
 read_concat()

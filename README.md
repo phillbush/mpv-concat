@@ -44,7 +44,7 @@ will generate a time range, which represents a video segment.  Repeat
 this process to create more segments.
 
 **Show segments.**
-To see all the segments made so far, press `Ctrl + S`.  All segments will
+To see all the segments made so far, press `Ctrl + P`.  All segments will
 appear in the terminal in order of creation, with their corresponding
 timestamps.  Incomplete segments will show up as “Segment N in progress”,
 where N is the segment number.
@@ -77,9 +77,9 @@ Example 2: Deleting segment number 76
 	Ctrl + D	# Exit segment deletion mode
 
 **Preview concatenation.**
-To preview how the segment concatenation will look like, press `Ctrl + P`
+To preview how the segment concatenation will look like, press `Ctrl + V`
 to enter the preview mode.   In this mode, the player will jump between
-segments.  To exit from the preview mode, press `Ctrl + P` again.
+segments.  To exit from the preview mode, press `Ctrl + V` again.
 
 **Write concat file.**
 To write the `concat.txt` file, to be used by ffmpeg, press `Ctrl + W`.
@@ -106,7 +106,7 @@ file will be created.
 ## Log level
 
 Everytime a timestamp is grabbed, a text will appear on the screen
-showing the selected time.  When `Ctrl + S` is pressed, besides showing
+showing the selected time.  When `Ctrl + P` is pressed, besides showing
 the segments in the terminal, it will also show on the screen the total
 number of cuts (or segments) that were made.  When pressing `Ctrl + W`,
 a message will be shown on the screen and the terminal telling that the
